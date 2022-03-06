@@ -86,19 +86,23 @@ fun deleteMarked(inputName: String, outputName: String) {
  *
  */
 fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
-    val map = mutableMapOf<String, Int>()
-    val listNonDuplicate = substrings.toSet().toList()
-    for (line in File(inputName).readLines()) {
-        for (i in listNonDuplicate.indices) {
-            if (listNonDuplicate[i] !in map.keys) map[listNonDuplicate[i]] = 0
-            for (elem in line.lowercase(Locale.getDefault()).indices) {
-                if (line.lowercase(Locale.getDefault()).startsWith(listNonDuplicate[i].lowercase(Locale.getDefault()), elem))
-                    map[listNonDuplicate[i]] = (map[listNonDuplicate[i]] ?: 0) + 1
+    val res = mutableMapOf<String , Int>()
+    val inputFile = File(inputName).readText().toLowerCase()
+    for(i in substrings ) {
+        var c = 0
+        val text = inputFile.windowed(i.length)
+        for(p in text){
+            if(p == i.lowercase()){
+                c++
             }
         }
+        res[i] = c
+
     }
-    return map
+       return res.toMap()
+
 }
+
 
 /**
  * Средняя (12 баллов)
@@ -114,7 +118,25 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val text = File(inputName).readText()
+    val consonants = setOf<Char>('ж' , 'ч' , 'ш' , 'щ')
+    val result = StringBuilder()
+
+    for(i in text.indices){
+        if(i >= 1 && text[i - 1].toLowerCase() in consonants) {
+            val inUppercase = text[i].isUpperCase()
+            val newLetter = when (val toChange = text[i].toLowerCase()) {
+                'ы' -> 'и'
+                'я' -> 'а'
+                'ю' -> 'у'
+                else -> toChange
+            }
+            if (inUppercase) result.append(newLetter.toUpperCase()) else result.append(newLetter)
+        }
+        else result.append(text[i])
+
+    }
+    File(outputName).writeText(result.toString())
 }
 
 /**
@@ -335,7 +357,39 @@ Suspendisse <s>et elit in enim tempus iaculis</s>.
  * (Отступы и переносы строк в примере добавлены для наглядности, при решении задачи их реализовывать не обязательно)
  */
 fun markdownToHtmlSimple(inputName: String, outputName: String) {
-    TODO()
+    var Text = File(inputName).readText()
+    var toReturn = File(outputName).bufferedWriter()
+    val sb = StringBuilder("<html><body><p>")
+
+    val modi = mapOf(
+        Pair("~~([\\s\\S]*?)~~", Pair("s", "~~")),
+        Pair("\\*\\*([\\s\\S]*?)\\*\\*", Pair("b", "**")),
+        Pair("\\*([\\s\\S]*?)\\*", Pair("i", "*"))
+    )
+    modi.forEach { (pattern, changes) ->
+        Text = Regex(pattern).replace(Text) { it ->
+            "<${changes.first}>" + it.value.replace(changes.second, "") + "</${changes.first}>"
+        }
+    }
+
+    var counter = 0
+    val lines = Text.split("\n") as MutableList
+    for (idx in lines.indices){
+        if(lines[idx].trim().isBlank()){
+            if(counter > 0 ){
+                if(lines.size > idx + 1 && lines[idx + 1].trim().isNotEmpty()){
+                    lines[idx] = "</p><p>"
+                    counter = 0
+                }
+            }
+        } else{
+            counter++
+        }
+}
+    sb.append(lines.joinToString(separator = "" ))
+    toReturn.write("$sb</p></body></html>")
+    toReturn.close()
+
 }
 
 /**

@@ -92,19 +92,17 @@ fun timeForHalfWay(
     t2: Double, v2: Double,
     t3: Double, v3: Double
 ): Double {
-    val s1 = v1 * t1
-    val s2 = v2 * t2
-    val s3 = v3 * t3
-    val s = (s1 + s2 + s3) / 2
+    val S1 = t1 * v1
+    val S2 = t2 * v2
+    val S3 = t3 * v3
+    val half = (S1 + S2 + S3) / 2
     return when {
-        s < t1 * v1 -> s / v1
-        (s > s1) && (s < s1 + s2) -> t1 + (s - s1) / v2
-        s > s1 + s2 -> t1 + t2 + (s - s1 - s2) / v3
-        s == s1 + s2 -> t1 + t2
-        s == s1 -> t1
-        else -> t1 + t2 + t3
+        (S1 >= half) -> half / v1
+        (S1 + S2 >= half) -> t1 + (half - S1) / v2
+        else -> t1 + t2 + (half - S1 - S2) / v3
     }
 }
+
 
 /**
  * Простая (2 балла)
@@ -163,20 +161,29 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val maxNum = maxOf(a, b, c)
-    val minNum = minOf(a, b, c)
-    val averageNum = a + b + c - maxNum - minNum
-    val sumSquaresLeg = minNum.pow(2) + averageNum.pow(2)
+fun triangleKind(a: Double, b: Double, c: Double) : Int {
+    var maxx : Double = maxOf(a,b,c)
+    var summ : Double
+
+    if(maxx==a) {
+        maxx = a * a
+        summ=b*b+c*c
+    }
+    else if(maxx==b){
+        maxx=b*b
+        summ=a*a+c*c
+    }
+    else{
+        maxx=c*c
+        summ=a*a+b*b
+    }
     return when {
-        maxNum > minNum + averageNum -> -1
-        maxNum.pow(2) == sumSquaresLeg -> 1
-        maxNum.pow(2) < sumSquaresLeg -> 0
-        maxNum.pow(2) > sumSquaresLeg -> 2
-        else -> -1
+        (a > b + c) || (b > a + c) || (c > b + a) -> -1
+        (maxx < summ) -> 0
+        (maxx > summ) -> 2
+        else -> 1
     }
 }
-
 
 /**
  * Средняя (3 балла)

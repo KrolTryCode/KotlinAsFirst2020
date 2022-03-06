@@ -2,6 +2,8 @@
 
 package lesson6.task1
 
+import java.lang.NumberFormatException
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -153,7 +155,21 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val res = mutableListOf<Int>()
+    for (elem in jumps.split(' '))
+        if (elem !in listOf("-", "%"))
+            try {
+                val result = elem.toInt()
+                res.add(result)
+            }
+
+            catch (e: NumberFormatException) {
+                return -1
+            }
+    return res.maxOrNull() ?: -1
+}
+
 
 /**
  * Сложная (6 баллов)
@@ -166,8 +182,21 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+   val dam = jumps.split(" ")
+   var m = -1
+   var d = 0
+    if(jumps.contains(Regex("""[^\d\s[-+%]]""")) || jumps.contains(Regex("""(([%+-](\d))|((\d)([%+-])))"""))) return -1
 
+      for(el in 0 until dam.size) {
+         if ( dam[el] == "+"){
+             d = dam[el - 1].toInt()
+       }
+
+          if(d > m) m=d
+   }
+    return m
+}
 /**
  * Сложная (6 баллов)
  *
@@ -214,7 +243,20 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    var parse = str.toLowerCase().split(" ")
+    if(parse.size == 1) return -1
+
+    var res = 0
+    for( it in 0 until parse.size) {
+        if (parse[it] == parse[it + 1])  return res
+        else if (parse.size == 2 && parse[it] != parse[it+1])  return -1
+        res += parse[it].length + 1
+
+
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
@@ -227,8 +269,25 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * или пустую строку при нарушении формата строки.
  * Все цены должны быть больше нуля либо равны нулю.
  */
-fun mostExpensive(description: String): String = TODO()
-
+fun mostExpensive(description: String): String {
+     var name = ""
+     var price = 0.0
+     var parts = description.split("; ")
+     return try {
+        for (element in parts.indices) {
+            val pair = parts[element].split(" ")
+            if (price <= pair[1].toDouble()) {
+                price = pair[1].toDouble()
+                name = pair[0]
+            }
+        }
+        return name
+     } catch (e: NumberFormatException) {
+        ""
+     } catch (a: IndexOutOfBoundsException) {
+        ""
+     }
+}
 /**
  * Сложная (6 баллов)
  *
@@ -279,3 +338,6 @@ fun fromRoman(roman: String): Int = TODO()
  *
  */
 fun computeDeviceCells(cells: Int, commands: String, limit: Int): List<Int> = TODO()
+
+
+

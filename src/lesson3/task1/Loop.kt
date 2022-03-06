@@ -60,13 +60,7 @@ fun isPerfect(n: Int): Boolean {
  *
  * Найти число вхождений цифры m в число n
  */
-fun digitCountInNumber(n: Int, m: Int): Int =
-    when {
-        n == m -> 1
-        n < 10 -> 0
-        else -> digitCountInNumber(n / 10, m) + digitCountInNumber(n % 10, m)
-    }
-
+fun digitCountInNumber(n: Int, m: Int): Int = TODO()
 /**
  * Простая (2 балла)
  *
@@ -92,16 +86,18 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var f1 = 1
-    var f2 = 1
-    var res = 1
-    for (i in 3..n) {
-        res = f1 + f2
-        f1 = f2
-        f2 = res
-    }
-    return res
+    var num1 = 1
+    var num2 = 1
+    var numx = 0
+      for (i in 3..n) {
+       numx = num2
+       num2 += num1
+       num1 = numx
+
 }
+return num2
+}
+
 
 /**
  * Простая (2 балла)
@@ -155,17 +151,7 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    // Находим НОД и с помощью его НОК
-    var a = m
-    var b = n
-    while (a > 0 && b > 0) {
-        if (b > a) b %= a
-        else a %= b
-    }
-    return ((m * n) / (a + b))
-}
-
+fun lcm(m: Int, n: Int): Int = TODO()
 /**
  * Средняя (3 балла)
  *
@@ -265,21 +251,23 @@ fun cos(x: Double, eps: Double): Double = TODO()
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun squareSequenceDigit(n: Int): Int {
-    var i = 1
-    var digitNum = 0
-    var num = 0
-    while (digitNum < n) {
-        num = sqr(i)
-        i++
-        digitNum += digitNumber(num)
+fun squareSequenceDigit(n: Int) : Int {
+    var chisl =0
+    var col = 0
+    var sqr = 0
+    while(col < n){
+        chisl ++
+        sqr = chisl * chisl
+        col += digitNumber(sqr)
     }
-    while (digitNum != n) {
-        num /= 10
-        digitNum--
+    while(col > n){
+        sqr /= 10
+        col -= 1
     }
-    return num % 10
+    return sqr % 10
 }
+
+
 
 /**
  * Сложная (5 баллов)

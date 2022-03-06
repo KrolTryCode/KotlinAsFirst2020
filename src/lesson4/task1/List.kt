@@ -126,12 +126,12 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * Модуль пустого вектора считать равным 0.0.
  */
 fun abs(v: List<Double>): Double {
-    var res = 0.0
-    for (element in v) {
-        res += sqr(element)
+    var otv = 0.0
+    for(i in 0 until v.size) {
+        otv += v[i].pow(2)
     }
-    return sqrt(res)
-}
+    return sqrt(otv)
+    }
 
 /**
  * Простая (2 балла)
@@ -156,10 +156,9 @@ fun mean(list: List<Double>): Double {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun center(list: MutableList<Double>): MutableList<Double> {
-    val average = mean(list)
-    for (i in 0 until list.size) {
-        list[i] -= average
-    }
+    var sr = mean(list)
+    for(i in 0 until list.size)
+        list[i] -= sr
     return list
 }
 
@@ -186,7 +185,17 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Коэффициенты многочлена заданы списком p: (p0, p1, p2, p3, ..., pN).
  * Значение пустого многочлена равно 0 при любом x.
  */
-fun polynom(p: List<Int>, x: Int): Int = TODO()
+fun polynom(p: List<Int>, x: Int): Int {
+    if( p.size == 0) return 0
+    else if (p.size == 1) return p[0]
+    else {
+        var sum: Int = p[0] + p[1] * x
+        for (i in 2 until p.size) {
+            sum += p[i] * x.toDouble().pow(i).toInt()
+        }
+        return sum
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -198,7 +207,13 @@ fun polynom(p: List<Int>, x: Int): Int = TODO()
  *
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
-fun accumulate(list: MutableList<Int>): MutableList<Int> = TODO()
+fun accumulate(list: MutableList<Int>): MutableList<Int> {
+
+    for(i in 1 until list.size)
+        list[i] += list[i - 1]
+
+    return list
+}
 
 /**
  * Средняя (3 балла)
@@ -249,6 +264,7 @@ fun convert(n: Int, base: Int): List<Int> = TODO()
  */
 fun convertToString(n: Int, base: Int): String = TODO()
 
+
 /**
  * Средняя (3 балла)
  *
@@ -280,16 +296,17 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-val list = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
-val equalList = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
-
 fun roman(n: Int): String {
+    val rom = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    val lat = listOf(1000,900,500,400,100,90,50,40,10,9,5,4,1)
+    var a = n
+    var i = 0
     var res = ""
-    var num = n
-    for (i in 12 downTo 0) {
-        while (num >= equalList[i]) {
-            res += list[i]
-            num -= equalList[i]
+
+    for(i in lat.indices){
+        while(a >= lat[i]){
+            res += rom[i]
+            a -= lat[i]
         }
     }
     return res
