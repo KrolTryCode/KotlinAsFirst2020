@@ -1,11 +1,11 @@
 git clone https://github.com/KrolTryCode/KotlinAsFirst2020.git -- сохраняем репозиторий  
-cd KotlinAsFirst2020 -- переходим в него
+cd KotlinAsFirst2020 -- переходим в него  
 git remote add upstream-my https://github.com/KrolTryCode/KotlinAsFirst2021.git -- добавляем свой репозиторий в KotlinAsFirst2020  
 git fetch upstream-my -- подгружаем KotlinAsFirst2021  
 git branch backport -- создаем новую ветку - backport  
-git checkout backport -- переходим в созданную ветку
-git cherry-pick d535f359...FETCH_HEAD -- загружаем историю коммитов 
-git remote add upstream-theirs https://github.com/Ken4ikS/KotlinAsFirst2021.git -- добавляем репозиторий товарища 
+git checkout backport -- переходим в созданную ветку  
+git cherry-pick d535f359...FETCH_HEAD -- загружаем историю коммитов  
+git remote add upstream-theirs https://github.com/Ken4ikS/KotlinAsFirst2021.git -- добавляем репозиторий товарища  
 git fetch upstream-theirs -- подгружаем репозиторий товарища  
 git add . -- добавляем измененные файлы, в которых возникли ошибки при merge  
 git commit -m  -- коммитим  
